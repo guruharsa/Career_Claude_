@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import Extras from './Extras.jsx';
+import AiPanel from './AiPanel.jsx';
 import { scheduleReminder, cancelReminder } from './reminders.js';
 
 export const STATUSES = ['Saved', 'Interested', 'Applied', 'Assessment', 'Interview', 'Offer', 'Rejected', 'Withdrawn'];
@@ -10,6 +11,7 @@ const fmt = (iso) =>
 export default function Jobs({ jobs, setJobs, profile }) {
   const [form, setForm] = useState({ title: '', company: '', link: '' });
   const [confirmId, setConfirmId] = useState(null);
+  const [openId, setOpenId] = useState(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('All');
   const [notice, setNotice] = useState('');
@@ -70,8 +72,9 @@ export default function Jobs({ jobs, setJobs, profile }) {
 
   return (
     <>
-      <form className="panel" onSubmit={add}>
-        <h2>Add a job</h2>
+      <details className="panel sec" open={jobs.length === 0}>
+        <summary>Add a job</summary>
+        <form className="stack" onSubmit={add}>
         <input
           placeholder="Job title"
           value={form.title}
@@ -91,6 +94,7 @@ export default function Jobs({ jobs, setJobs, profile }) {
         />
         <button className="primary" type="submit">Add job</button>
       </form>
+      </details>
 
       {jobs.length > 0 && (
         <div className="filters">
@@ -126,14 +130,16 @@ export default function Jobs({ jobs, setJobs, profile }) {
       {visible.map((j) => {
         const passed = j.remindAt && new Date(j.remindAt).getTime() <= Date.now();
         return (
-          <article className="job" key={j.id}>
-            <div className="job-head">
+          <article className="job fold" key={j.id}>
+            <div className="job-head" onClick={() => setOpenId(openId === j.id ? null : j.id)}>
               <div>
                 <h3>{j.title}</h3>
                 <p className="company">{j.company}</p>
               </div>
               <span className={`badge s-${j.status}`}>{j.status}</span>
             </div>
+            {openId === j.id && (
+            <div className="more">
             {j.link && (
               <a
                 href={j.link.startsWith('http') ? j.link : `https://${j.link}`}
@@ -171,9 +177,12 @@ export default function Jobs({ jobs, setJobs, profile }) {
                 {passed ? 'Reminder time has passed' : `Reminds you ${fmt(j.remindAt)}`}
               </p>
             )}
+            <AiPanel job={j} patch={patch} profile={profile} />
             <button className="danger" onClick={() => remove(j.id)}>
               {confirmId === j.id ? 'Tap again to delete' : 'Delete'}
             </button>
+            </div>
+            )}
           </article>
         );
       })}

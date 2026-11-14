@@ -7,6 +7,13 @@ import Insights from './Insights.jsx';
 import Profile from './Profile.jsx';
 
 const EMPTY_PROFILE = { name: '', role: '', location: '' };
+const ICONS = {
+  jobs: <><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /></>,
+  discover: <><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" /></>,
+  resumes: <><path d="M6 3h9l4 4v14H6z" /><path d="M14 3v5h5" /></>,
+  insights: <path d="M5 20V10M12 20V4M19 20v-7" />,
+  profile: <><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></>,
+};
 const TABS = [
   { id: 'jobs', label: 'Jobs' },
   { id: 'discover', label: 'Discover' },
@@ -56,6 +63,7 @@ export default function App() {
       <nav>
         {TABS.map((t) => (
           <button key={t.id} className={tab === t.id ? 'on' : ''} onClick={() => setTab(t.id)}>
+            <svg viewBox="0 0 24 24">{ICONS[t.id]}</svg>
             {t.label}
           </button>
         ))}

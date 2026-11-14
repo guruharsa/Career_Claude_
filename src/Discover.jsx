@@ -93,8 +93,9 @@ export default function Discover({ jobs, setJobs, profile }) {
 
   return (
     <>
-      <form className="panel" onSubmit={addBoard}>
-        <h2>Company boards</h2>
+      <details className="panel sec">
+        <summary>Company boards</summary>
+        <form className="stack" onSubmit={addBoard}>
         <p className="meta">Add a company's career page name (the part after boards.greenhouse.io/, jobs.lever.co/ or jobs.ashbyhq.com/).</p>
         <div className="row">
           <select style={{ width: 120 }} value={form.provider} onChange={(e) => setForm({ ...form, provider: e.target.value })}>
@@ -111,18 +112,22 @@ export default function Discover({ jobs, setJobs, profile }) {
         ))}
         <button className="primary" type="button" disabled={busy} onClick={refresh}>{busy ? 'Working…' : 'Refresh listings'}</button>
       </form>
+      </details>
 
-      <div className="panel">
-        <h2>Adzuna search (optional)</h2>
+      <details className="panel sec">
+        <summary>Adzuna search (optional)</summary>
+        <div className="stack">
         <p className="meta">Uses your own free Adzuna keys, stored only on this phone. Country is a two-letter code such as in, gb or us.</p>
         <input placeholder="App id" value={adz.id} onChange={(e) => setAdz({ ...adz, id: e.target.value })} />
         <input placeholder="App key" type="password" value={adz.key} onChange={(e) => setAdz({ ...adz, key: e.target.value })} />
         <input placeholder="Country code" value={adz.country} onChange={(e) => setAdz({ ...adz, country: e.target.value })} />
         <button className="ghost" disabled={busy} onClick={aggregator}>Search Adzuna with the filters below</button>
-      </div>
+        </div>
+      </details>
 
-      <div className="panel">
-        <h2>Near me</h2>
+      <details className="panel sec">
+        <summary>Near me and map</summary>
+        <div className="stack">
         {!home ? <p className="meta">Set a home location in Profile to filter by distance.</p> : (
           <>
             <p className="meta">Home: {profile.homeName}</p>
@@ -135,7 +140,8 @@ export default function Discover({ jobs, setJobs, profile }) {
           </>
         )}
         <button className={`chip ${showMap ? 'on' : ''}`} style={{ alignSelf: 'flex-start' }} onClick={() => setShowMap(!showMap)}>{showMap ? 'Hide map' : 'Show map'}</button>
-      </div>
+        </div>
+      </details>
       {showMap && (
         <Suspense fallback={<p className="empty">Loading map…</p>}>
           <MapView home={home} radiusKm={near.km} points={shown.filter((l) => l.pt && !l.remote)} />
