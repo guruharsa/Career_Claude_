@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { skillGap, DOCS } from './skills.js';
+import { shareIcs } from './ics.js';
 import { parseSalary, getRates, convert, money } from './salary.js';
 
 export default function Extras({ job, patch, profile }) {
@@ -13,6 +14,11 @@ export default function Extras({ job, patch, profile }) {
 
   return (
     <>
+      <label>Interview date and time</label>
+      <div className="row">
+        <input type="datetime-local" value={job.interviewAt || ''} onChange={(e) => patch(job.id, { interviewAt: e.target.value })} />
+        {job.interviewAt && <button className="ghost" onClick={() => shareIcs(job)}>Add to calendar</button>}
+      </div>
       <label>Salary as posted (leave blank if not listed)</label>
       <input
         placeholder="e.g. 12-18 LPA or $120k-$150k"

@@ -18,7 +18,7 @@ export default function Resumes({ resumes, setResumes }) {
     setNotice('');
     try {
       const meta = await storeResume(file);
-      setResumes((prev) => [meta, ...prev]);
+      setResumes((prev) => [{ ...meta, label: '', primary: prev.length === 0 }, ...prev]);
     } catch (err) {
       setNotice(err.message || 'Could not save that file.');
     }
@@ -40,7 +40,10 @@ export default function Resumes({ resumes, setResumes }) {
       return;
     }
     await removeResume(r);
-    setResumes((prev) => prev.filter((x) => x.id !== r.id));
+    setResumes((prev) => {
+      const n = prev.filter((x) => x.id !== r.id);
+      return n.length && !n.some((x) => x.primary) ? n.map((x, i) => ({ ...x, primary: i === 0 })) : n;
+    });
     setConfirmId(null);
   };
 
@@ -70,6 +73,12 @@ export default function Resumes({ resumes, setResumes }) {
       {resumes.map((r) => (
         <article className="job" key={r.id}>
           <h3 className="filename">{r.name}</h3>
+          <input placeholder="Version label, e.g. DevOps focus" value={r.label || ''}
+            onChange={(e) => setResumes((p) => p.map((x) => (x.id === r.id ? { ...x, label: e.target.value } : x)))} />
+          <button className={`chip ${r.primary ? 'on' : ''}`}
+            onClick={() => setResumes((p) => p.map((x) => ({ ...x, primary: x.id === r.id })))}>
+            {r.primary ? 'Primary resume' : 'Make primary'}
+          </button>
           <p className="meta">
             {size(r.size)} · Added {new Date(r.addedAt).toLocaleDateString([], { dateStyle: 'medium' })}
           </p>

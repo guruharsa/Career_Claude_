@@ -44,7 +44,7 @@ export default function App() {
       <header>
         <h1>{current.label}</h1>
         {tab === 'jobs' && <span className="count">{jobs.length} tracked</span>}
-        {tab === 'discover' && <Discover jobs={jobs} setJobs={setJobs} />}
+        {tab === 'discover' && <Discover jobs={jobs} setJobs={setJobs} profile={profile} />}
         {tab === 'resumes' && <span className="count">{resumes.length} saved</span>}
       </header>
       <main>

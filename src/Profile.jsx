@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import HomePicker from './HomePicker.jsx';
 import { CURRENCIES } from './salary.js';
 import { exportData, eraseAll } from './data.js';
 
@@ -15,6 +16,7 @@ export default function Profile({ profile, setProfile, jobs, resumes }) {
         <label>Target role</label><input value={profile.role} onChange={set('role')} />
         <label>Summary</label><textarea rows={3} value={profile.summary || ''} onChange={set('summary')} />
         <label>Location</label><input value={profile.location} onChange={set('location')} />
+        <HomePicker profile={profile} setProfile={setProfile} />
         <label>Other target locations (one per line)</label>
         <textarea rows={2} value={profile.targets || ''} onChange={set('targets')} />
         <label>Work mode</label>

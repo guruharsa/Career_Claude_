@@ -91,7 +91,7 @@ export async function searchAdzuna(cfg, what, where, existing) {
     const key = urlKey(j.redirect_url);
     const sal = j.salary_min ? `${j.salary_min}-${j.salary_max || j.salary_min}` : '';
     map.set(key, { title: j.title, company: j.company?.display_name || '', location: j.location?.display_name || '',
-      remote: /remote/i.test(`${j.title} ${j.location?.display_name}`), url: j.redirect_url, description: plain(j.description).slice(0, 3000),
+      remote: /remote/i.test(`${j.title} ${j.location?.display_name}`), url: j.redirect_url, lat: j.latitude, lon: j.longitude, description: plain(j.description).slice(0, 3000),
       salary: sal, publishedAt: iso(j.created), key, source: 'Adzuna', discoveredAt: map.get(key)?.discoveredAt || now,
       lastCheckedAt: map.get(key)?.lastCheckedAt || null, status: map.get(key)?.status || 'Not Yet Verified' });
   }
