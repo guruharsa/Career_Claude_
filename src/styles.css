@@ -77,3 +77,33 @@ nav {
 }
 nav button { flex: 1; background: transparent; color: var(--muted); font-weight: 600; }
 nav button.on { color: var(--accent); background: #232b33; }
+
+.filters { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.chip {
+  flex: none;
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+.chip.on { color: #1b1408; background: var(--accent); border-color: var(--accent); font-weight: 600; }
+.notice {
+  background: #2a2417;
+  border: 1px solid #5c4724;
+  color: var(--accent);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 0 0 14px;
+  font-size: 14px;
+}
+.row { display: flex; gap: 8px; align-items: center; }
+.row input { flex: 1; min-width: 0; }
+.grow { flex: 1; }
+.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+.meta { margin: 0; color: var(--muted); font-size: 14px; }
+.meta.late { color: #e5877f; }
+.filename { word-break: break-all; }
+button:disabled { opacity: 0.6; }
