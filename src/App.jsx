@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { load, save } from './storage.js';
 import Jobs from './Jobs.jsx';
+import Discover from './Discover.jsx';
 import Resumes from './Resumes.jsx';
 import Insights from './Insights.jsx';
 import Profile from './Profile.jsx';
@@ -8,6 +9,7 @@ import Profile from './Profile.jsx';
 const EMPTY_PROFILE = { name: '', role: '', location: '' };
 const TABS = [
   { id: 'jobs', label: 'Jobs' },
+  { id: 'discover', label: 'Discover' },
   { id: 'resumes', label: 'Resumes' },
   { id: 'insights', label: 'Insights' },
   { id: 'profile', label: 'Profile' },
@@ -42,6 +44,7 @@ export default function App() {
       <header>
         <h1>{current.label}</h1>
         {tab === 'jobs' && <span className="count">{jobs.length} tracked</span>}
+        {tab === 'discover' && <Discover jobs={jobs} setJobs={setJobs} />}
         {tab === 'resumes' && <span className="count">{resumes.length} saved</span>}
       </header>
       <main>

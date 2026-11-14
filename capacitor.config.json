@@ -1,5 +1,8 @@
 {
   "appId": "com.careeragent.ai",
   "appName": "Career Tracker",
-  "webDir": "dist"
+  "webDir": "dist",
+  "plugins": {
+    "CapacitorHttp": { "enabled": true }
+  }
 }
