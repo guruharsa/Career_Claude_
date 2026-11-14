@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
+import Extras from './Extras.jsx';
 import { scheduleReminder, cancelReminder } from './reminders.js';
 
-export const STATUSES = ['Saved', 'Applied', 'Interview', 'Offer', 'Rejected'];
+export const STATUSES = ['Saved', 'Interested', 'Applied', 'Assessment', 'Interview', 'Offer', 'Rejected', 'Withdrawn'];
 
 const fmt = (iso) =>
   new Date(iso).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
 
-export default function Jobs({ jobs, setJobs }) {
+export default function Jobs({ jobs, setJobs, profile }) {
   const [form, setForm] = useState({ title: '', company: '', link: '' });
   const [confirmId, setConfirmId] = useState(null);
   const [query, setQuery] = useState('');
@@ -153,6 +154,7 @@ export default function Jobs({ jobs, setJobs }) {
               value={j.notes}
               onChange={(e) => patch(j.id, { notes: e.target.value })}
             />
+            <Extras job={j} patch={patch} profile={profile} />
             <label>Follow-up reminder</label>
             <div className="row">
               <input

@@ -107,3 +107,8 @@ nav button.on { color: var(--accent); background: #232b33; }
 .meta.late { color: #e5877f; }
 .filename { word-break: break-all; }
 button:disabled { opacity: 0.6; }
+.bar-row { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.bar-row span { width: 84px; color: var(--muted); }
+.bar { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: currentColor; }
+.gap { display: flex; flex-direction: column; gap: 6px; }
