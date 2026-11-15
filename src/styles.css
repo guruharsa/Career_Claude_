@@ -70,3 +70,9 @@ nav { display: flex; background: var(--surface); border-top: 1px solid var(--lin
 nav button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 54px; padding: 6px 0; border: 0; border-radius: 10px; font-size: 11px; color: var(--muted); }
 nav button.on { color: var(--accent); }
 nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { margin: 0; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stack > label, .more > label { margin: 6px 0 -4px; }
+.job .sec > summary { font-size: 15px; }
+.job .sec { border-top: 1px solid var(--line); padding-top: 10px; }

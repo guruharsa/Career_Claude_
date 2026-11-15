@@ -42,3 +42,11 @@ export async function shareResume(meta) {
   const { uri } = await Filesystem.getUri({ path: tmp, directory: Directory.Cache });
   await Share.share({ title: meta.name, url: uri, dialogTitle: 'Open or share resume' });
 }
+
+export async function loadResumeFile(meta) {
+  const { data } = await Filesystem.readFile({ path: meta.path, directory: Directory.Data });
+  const bin = atob(data);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new File([bytes], meta.name);
+}

@@ -1,4 +1,5 @@
 import { extractSkills } from './skills.js';
+import { findPhone } from './parse.js';
 
 const numbers = (t = '') =>
   new Set((t.match(/\d[\d,]*(?:\.\d+)?\s?(?:%|k\b|m\b|x\b|lpa\b)?/gi) || []).map((s) => s.toLowerCase().replace(/[\s,]/g, '')));
@@ -15,12 +16,13 @@ export function factGate(base = '', tailored = '') {
 
 // Text-level ATS check, 0 to 100
 export function atsScore(t = '') {
-  const found = ['experience', 'education', 'skills', 'summary'].filter((h) => new RegExp(`^\\s*${h}\\b`, 'im').test(t)).length;
+  const groups = [/^\s*(professional\s+)?(summary|profile|objective|about)/im, /^\s*(work\s+|professional\s+)?(experience|employment|work history)/im, /^\s*education/im, /^\s*((technical|key|core)\s+)?(skills|competencies)/im];
+  const found = groups.filter((re) => re.test(t)).length;
   const words = t.split(/\s+/).filter(Boolean).length;
   const tips = [];
   const email = /[\w.+-]+@[\w-]+\.[\w.]+/.test(t);
-  const phone = /\+?\d[\d\s().-]{8,}\d/.test(t);
-  const plain = !/\t|\|/.test(t);
+  const phone = !!findPhone(t);
+  const plain = !/\t|\|/.test(t.split('\n').slice(4).join('\n'));
   if (found < 4) tips.push('Use standard headings: Summary, Experience, Education, Skills.');
   if (!email || !phone) tips.push('Put your email and phone in the text.');
   if (!plain) tips.push('Remove tables and tab or pipe characters.');

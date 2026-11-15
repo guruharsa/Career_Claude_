@@ -4,54 +4,74 @@ import HomePicker from './HomePicker.jsx';
 import { CURRENCIES } from './salary.js';
 import { exportData, eraseAll } from './data.js';
 
+function Field({ label, children }) {
+  return <div className="field"><label>{label}</label>{children}</div>;
+}
+
 export default function Profile({ profile, setProfile, jobs, resumes }) {
   const [typed, setTyped] = useState('');
   const [msg, setMsg] = useState('');
-  const set = (k) => (e) => setProfile({ ...profile, [k]: e.target.value });
+  const bind = (k) => ({ value: profile[k] || '', onChange: (e) => setProfile({ ...profile, [k]: e.target.value }) });
   return (
     <>
       <details className="panel sec" open>
-        <summary>Your profile</summary>
+        <summary>About you</summary>
         <div className="stack">
-        <label>Name</label><input value={profile.name} onChange={set('name')} />
-        <label>Headline</label><input value={profile.headline || ''} onChange={set('headline')} />
-        <label>Target role</label><input value={profile.role} onChange={set('role')} />
-        <label>Summary</label><textarea rows={3} value={profile.summary || ''} onChange={set('summary')} />
-        <label>Location</label><input value={profile.location} onChange={set('location')} />
-        <HomePicker profile={profile} setProfile={setProfile} />
-        <label>Other target locations (one per line)</label>
-        <textarea rows={2} value={profile.targets || ''} onChange={set('targets')} />
-        <label>Work mode</label>
-        <select value={profile.mode || 'All'} onChange={set('mode')}>
-          {['All', 'Remote', 'Hybrid', 'On-site'].map((m) => <option key={m}>{m}</option>)}
-        </select>
-        <label>Years of experience</label><input inputMode="numeric" value={profile.years || ''} onChange={set('years')} />
-        <label>Notice period (days)</label><input inputMode="numeric" value={profile.notice || ''} onChange={set('notice')} />
-        <label>Expected salary per year</label>
-        <div className="row">
-          <input inputMode="numeric" value={profile.salary || ''} onChange={set('salary')} />
-          <select value={profile.currency || 'INR'} onChange={set('currency')} style={{ width: 96 }}>
-            {CURRENCIES.map((c) => <option key={c}>{c}</option>)}
-          </select>
-        </div>
-        <label>Skills (comma separated, used for skill-gap checks)</label>
-        <textarea rows={2} value={profile.skills || ''} onChange={set('skills')} />
-        <label>Baseline resume text (the AI tools use only this; paste your primary resume)</label>
-        <textarea rows={6} value={profile.resumeText || ''} onChange={set('resumeText')} />
+          <Field label="Name"><input {...bind('name')} /></Field>
+          <Field label="Headline"><input {...bind('headline')} /></Field>
+          <Field label="Target role"><input {...bind('role')} /></Field>
+          <div className="grid2">
+            <Field label="Email"><input inputMode="email" autoCapitalize="none" {...bind('email')} /></Field>
+            <Field label="Phone"><input inputMode="tel" {...bind('phone')} /></Field>
+          </div>
+          <Field label="Summary"><textarea rows={3} {...bind('summary')} /></Field>
         </div>
       </details>
+
+      <details className="panel sec">
+        <summary>Location and preferences</summary>
+        <div className="stack">
+          <Field label="Location"><input {...bind('location')} /></Field>
+          <HomePicker profile={profile} setProfile={setProfile} />
+          <Field label="Other target locations (one per line)"><textarea rows={2} {...bind('targets')} /></Field>
+          <Field label="Work mode">
+            <select {...bind('mode')}>{['All', 'Remote', 'Hybrid', 'On-site'].map((m) => <option key={m}>{m}</option>)}</select>
+          </Field>
+          <div className="grid2">
+            <Field label="Years of experience"><input inputMode="numeric" {...bind('years')} /></Field>
+            <Field label="Notice (days)"><input inputMode="numeric" {...bind('notice')} /></Field>
+          </div>
+          <Field label="Expected salary per year">
+            <div className="row">
+              <input inputMode="numeric" {...bind('salary')} />
+              <select style={{ width: 96, flex: 'none' }} {...bind('currency')}>{CURRENCIES.map((c) => <option key={c}>{c}</option>)}</select>
+            </div>
+          </Field>
+        </div>
+      </details>
+
+      <details className="panel sec">
+        <summary>Skills and resume text</summary>
+        <div className="stack">
+          <p className="meta">Uploading a resume fills these in. You can edit them.</p>
+          <Field label="Skills (comma separated)"><textarea rows={3} {...bind('skills')} /></Field>
+          <Field label="Resume text (the AI tools use only this)"><textarea rows={8} {...bind('resumeText')} /></Field>
+        </div>
+      </details>
+
       <details className="panel sec">
         <summary>AI provider</summary>
         <div className="stack"><AiSettings /></div>
       </details>
+
       <details className="panel sec">
         <summary>Your data</summary>
         <div className="stack">
-        <p className="meta">Everything is stored on this phone. Export it, or erase it permanently.</p>
-        <button className="ghost" onClick={() => exportData(jobs, resumes, profile).catch(() => setMsg('Could not export.'))}>Export my data</button>
-        <input placeholder='Type DELETE to enable erase' value={typed} onChange={(e) => setTyped(e.target.value)} />
-        <button className="danger" disabled={typed !== 'DELETE'} onClick={() => eraseAll(resumes)}>Erase all my data</button>
-        {msg && <p className="notice">{msg}</p>}
+          <p className="meta">Everything is stored on this phone. Export it, or erase it permanently.</p>
+          <button className="ghost" onClick={() => exportData(jobs, resumes, profile).catch(() => setMsg('Could not export.'))}>Export my data</button>
+          <input placeholder="Type DELETE to enable erase" value={typed} onChange={(e) => setTyped(e.target.value)} />
+          <button className="danger" disabled={typed !== 'DELETE'} onClick={() => eraseAll(resumes)}>Erase all my data</button>
+          {msg && <p className="notice">{msg}</p>}
         </div>
       </details>
     </>
